@@ -1,9 +1,9 @@
 import React from 'react';
 import {Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap';
 
-
+ 
     function RenderDish({dish}) {
-        if(dish.dish != null) {
+        if(dish != null) {
             return (
                
                 <div className='col-12 col-md-5 m-1'>
@@ -31,18 +31,13 @@ import {Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap';
             return(
                 <li key={comment.id}>
                     <p>{comment.comment}</p>
-                    <p>-- <i>{comment.author}</i>, &nbsp;
-                      {new Intl.DateTimeFormat('en-US',
-                      {
-                      year:'numeric',
-                      month:'long',
-                      day:'2-digit'
-                      }).format(new Date(comment.date))}
+                    <p>-- <i>{comment.author}</i>, &nbsp; 
+                    {comment.date}
                     </p>
                 </li>
             );
         });
-        if(comments.comments != null) {
+        if(comments != null) {
             return( 
                 <div className='col-12 col-md-5 m-1'>
                    <h4>Comments</h4>
@@ -57,15 +52,14 @@ import {Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap';
     }
 
     const DishDetail = (props) => {
-      
-        
-        if(props.dish != null) {
+        const dish = props.dish;
+        if(dish != null) {
             return(
                 <div className='container'>
-                   <div className='row my-3'>
-                      <RenderDish dish={props.dish} />
-                      <RenderComments comments={props.dish.comments} />
-                   </div>
+                    <div className='row my-3'>
+                       <RenderDish dish={dish} />
+                       <RenderComments comments={dish.comments} />
+                    </div>
                 </div>
             );
         } else {
@@ -73,6 +67,5 @@ import {Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap';
         }
 
     }
-
 
 export default DishDetail;
