@@ -126,7 +126,6 @@ class Contact extends Component {
                                     validators={{
                                         required, minLength: minLength(3), maxLength: maxLength(15),
                                         isNumber
-
                                     }}
                                 />
                                 <Errors
@@ -149,7 +148,6 @@ class Contact extends Component {
                                     placeholder='Email' 
                                     validators={{
                                         required, validEmail
-
                                     }}
                                 />
                                 <Errors
