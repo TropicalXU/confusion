@@ -8,7 +8,7 @@ import Footer from './FooterComponent';
 import DishDetail from './DishdetailComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchDishes } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -19,8 +19,12 @@ const mapStateToProps = state => {
     }
 }
 
+//dispatch(thunk) needs to be dispatched into mapDispatchToProps so that dispatch dishes becomes avail - for main comp to make use of in lifecycle method(componentDidMount())
 const mapDispatchToProps = (dispatch) => ({
-    addComment: (dishId, author, rating, comment) => dispatch(addComment(dishId, author, rating, comment))
+    addComment: (dishId, author, rating, comment) => dispatch(addComment(dishId, author, rating, comment)),
+    fetchDishes: () => {
+        dispatch(fetchDishes())//call to fetchDishes(thunk)func that has been imported
+    }
 });
 
 class Main extends Component {
@@ -30,12 +34,19 @@ class Main extends Component {
 
     }
 
+    //whatever is in this lifecycle method will be called when this comp is mounted to the view
+    componentDidMount() {
+        this.props.fetchDishes();
+    }
+
     render() {
 
         const HomePage = () => {
             return(
-                <Home 
-                    dish={ this.props.dishes.filter( (dish)=>dish.featured )[0] }
+                <Home //dish={calling on props.dishes.dishes from dishes.js in Redux folder}
+                    dish={ this.props.dishes.dishes.filter( (dish)=>dish.featured )[0] }
+                    dishesLoading={this.props.dishes.isLoading}
+                    dishesErrMsg={this.props.dishes.errMsg}
                     promotion={this.props.promotions.filter( (promotion)=>promotion.featured )[0] }
                     leader={this.props.leaders.filter( (leader)=>leader.featured )[0] }
                 />
@@ -45,8 +56,9 @@ class Main extends Component {
         const DishWithId = ({match}) => {
             return(
                 <DishDetail 
-                
-                dish={this.props.dishes.filter( (dish) => dish.id === parseInt(match.params.dishId, 10))[0] } 
+                dish={this.props.dishes.dishes.filter( (dish) => dish.id === parseInt(match.params.dishId, 10))[0] } 
+                isLoading={this.props.dishes.isLoading}
+                errMsg={this.props.dishes.errMsg}
                 comments={this.props.comments.filter( (comment) => comment.dishId === parseInt(match.params.dishId, 10)) }
                 addComment={this.props.addComment} 
                 
