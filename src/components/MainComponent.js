@@ -8,7 +8,7 @@ import Footer from './FooterComponent';
 import DishDetail from './DishdetailComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchComments, fetchDishes, fetchPromos } from '../redux/ActionCreators';
+import { postComment, fetchComments, fetchDishes, fetchPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 const mapStateToProps = state => {
@@ -22,7 +22,7 @@ const mapStateToProps = state => {
 
 //dispatch(thunk) needs to be dispatched into mapDispatchToProps so that dispatch dishes becomes avail - for main comp to make use of in lifecycle method(componentDidMount())
 const mapDispatchToProps = (dispatch) => ({
-    addComment: (dishId, author, rating, comment) => dispatch(addComment(dishId, author, rating, comment)),
+    postComment: (dishId, author, rating, comment) => dispatch(postComment(dishId, author, rating, comment)),
 
     fetchDishes: () => {
         dispatch(fetchDishes())//call to fetchDishes(thunk)func that has been imported
@@ -77,7 +77,7 @@ class Main extends Component {
                 errMsg={this.props.dishes.errMsg}
                 comments={this.props.comments.comments.filter( (comment) => comment.dishId === parseInt(match.params.dishId, 10)) }
                 commentsErrMsg={this.props.comments.errMsg}
-                addComment={this.props.addComment} 
+                postComment={this.props.postComment} 
                 
                 
                 />
